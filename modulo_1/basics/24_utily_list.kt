@@ -29,7 +29,7 @@ fun main() {
   val suma = numerosReduce.reduce {acc, n -> acc + n}
   println(suma)
   val producto = numerosReduce.reduce {acc ,n -> acc * n}
-  println(producto)
+  println(producto) 
   
   println("fold")
    val sumaFold = numerosReduce.fold(100) {acc, n -> acc + n}
