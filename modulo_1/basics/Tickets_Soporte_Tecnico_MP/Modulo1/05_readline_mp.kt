@@ -1,5 +1,5 @@
 fun main() {
-    println("--- METRICAS DE SOPORTE TECNICO ---")
+    println(" METRICAS DE SOPORTE TECNICO ")
     
     val ticketsResueltos = 10
     val tiempoTotalHoras = 2
@@ -20,7 +20,7 @@ fun main() {
     
     println("Ticket #11 % 2 técnicos = ${11 % 2} (Determina a quien le toca)")
 
-    println("\n--- CONTROL DE CARGA (Asignacion Compuesta) ---")
+    println("\n CONTROL DE CARGA (Asignacion Compuesta) ")
     var ticketsEnCola = 10
     
     ticketsEnCola += 5 

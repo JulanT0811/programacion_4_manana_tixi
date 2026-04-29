@@ -1,32 +1,48 @@
 fun main() {
-    println("operadores aritmeticos")
-    val numero1 = 10
-    val numero2 = 2
-    println("Suma")
-    println("$numero1 + $numero2 : ${numero1+numero2}")
-    println("resta")
-    println("$numero1 - $numero2 : ${numero1-numero2}")
-    println("Multiplicacion")
-    println("$numero1 * $numero2 : ${numero1*numero2}")
-    println("Division")
-    println("$numero1 / $numero2 : ${numero1/numero2}")
-    println("Modulo")
-    println("$numero1 % $numero2 : ${numero1%numero2}")
-    println("Operadores de asignacion compuesta")
-    var x=10
-    x+=5
-    println("x +- $x")
-    x-=3
-    println("x-=3 $x")
-    x*=6
-    println("x-=2 $x")
-    x/=2
-    println("x/=2 $x")
-    x%=2
-    println("x/=2 $x")
-    //incremento o decremento
-    x++
-    println("x++ $x")
-    x--
-    println("x-- $x")
+    println("Sistema de Gestion de Tickets de Soporte")
+
+    val ticketsAbiertos = 15
+    val ticketsResueltosHoy = 3
+
+    println("Estadisticas del Turno:")
+    println("Total de tickets en historial: $ticketsAbiertos + $ticketsResueltosHoy = ${ticketsAbiertos + ticketsResueltosHoy}")
+
+    println("Tickets pendientes de asignar: $ticketsAbiertos - $ticketsResueltosHoy = ${ticketsAbiertos - ticketsResueltosHoy}")
+
+    val tiempoPorTicketMin = 20
+    println("Tiempo estimado restante: $ticketsAbiertos * $tiempoPorTicketMin = ${ticketsAbiertos * tiempoPorTicketMin} minutos")
+
+    val tecnicosDisponibles = 2
+    println("Tickets por tecnico: $ticketsAbiertos / $tecnicosDisponibles = ${ticketsAbiertos / tecnicosDisponibles}")
+
+    println("Tickets que sobran tras reparto equitativo: $ticketsAbiertos % $tecnicosDisponibles = ${ticketsAbiertos % tecnicosDisponibles}")
+
+    println(" Actualizacion de Estado del Ticket ")
+
+    var prioridadTicket = 10
+    println("Prioridad inicial: $prioridadTicket")
+
+    prioridadTicket += 15
+    println("Urgencia aumentada (+15): $prioridadTicket")
+
+    prioridadTicket -= 5
+    println("Prioridad ajustada (-5): $prioridadTicket")
+
+    prioridadTicket *= 2
+    println("Prioridad VIP (x2): $prioridadTicket")
+
+    prioridadTicket /= 4
+    println("Prioridad tras asignacion senior (/4): $prioridadTicket")
+
+    println(" Contadores de Interacciones ")
+
+    var interaccionesCliente = 1
+    println("Interaccion inicial: $interaccionesCliente")
+
+    interaccionesCliente++
+    println("Nuevo mensaje recibido (incremento): $interaccionesCliente")
+
+    var intentosDeCierre = 3
+    intentosDeCierre--
+    println("Intentos de cierre restantes (decremento): $intentosDeCierre")
 }
