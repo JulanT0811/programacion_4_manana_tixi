@@ -10,11 +10,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Saludo(nombre: String) {
-    Text(text = "Hola, $nombre!")
-}
-
-@Composable
 fun S01_SaludoScreen() {
     Column(
         modifier            = Modifier.fillMaxSize().padding(24.dp),
@@ -29,12 +24,15 @@ fun S01_SaludoScreen() {
         Saludo("Ana")
         Saludo("Luis")
         Saludo("Kotlin")
-
         HorizontalDivider()
-
+        Suma(1,2)
         MensajeCondicional(mostrar = true)
         MensajeCondicional(mostrar = false)
     }
+}
+@Composable
+fun Saludo(nombre: String) {
+    Text(text = "Hola, $nombre!")
 }
 
 @Composable
@@ -47,9 +45,16 @@ private fun MensajeCondicional(mostrar: Boolean) {
             color = MaterialTheme.colorScheme.outline)
     }
 }
+@Composable
+fun Suma(a: Int,b: Int){
+    var suma = a + b
+    Text(text = "El resultado es $a + $b = $suma")
+
+}
 
 @Preview(showBackground = true)
 @Composable
 fun S01_Preview() {
     MaterialTheme { S01_SaludoScreen() }
 }
+

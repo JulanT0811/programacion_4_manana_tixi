@@ -1,6 +1,6 @@
+// model/Contacto.kt
 package com.ute.compose.model
 
-// model/Contacto.kt
 data class Contacto(
     val id:       Int,
     val nombre:   String,
