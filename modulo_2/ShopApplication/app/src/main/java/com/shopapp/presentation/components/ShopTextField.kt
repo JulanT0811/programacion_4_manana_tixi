@@ -4,6 +4,7 @@ package com.shopapp.presentation.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
@@ -63,9 +64,9 @@ fun ShopTextField(
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
                             imageVector = if (passwordVisible)
-                                androidx.compose.material.icons.Icons.Default.VisibilityOff
+                                Icons.Default.VisibilityOff
                             else
-                                androidx.compose.material.icons.Icons.Default.Visibility,
+                                Icons.Default.Visibility,
                             contentDescription = if (passwordVisible) "Ocultar" else "Mostrar",
                             tint = TextSecondary,
                         )

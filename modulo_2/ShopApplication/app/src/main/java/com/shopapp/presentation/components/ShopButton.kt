@@ -1,5 +1,3 @@
-package com.shopapp.presentation.components
-
 // presentation/components/ShopButton.kt
 package com.shopapp.presentation.components
 
