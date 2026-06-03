@@ -7,7 +7,8 @@ class TicketSoporte(titular: String, prioridadInicial: Int) {
     internal val codigoTicket: String =
         "TK-${(100000..999999).random()}"
 
-    protected open fun calcularPrioridadCompleta(): Int = prioridad + 1
+    // Advertencia eliminada: Se quitó 'open' porque la clase es final
+    protected fun calcularPrioridadCompleta(): Int = prioridad + 1
 
     fun escalarTicket(nivel: Int) {
         require(nivel > 0) { "El nivel debe ser positivo" }
@@ -29,11 +30,11 @@ class TicketSoporte(titular: String, prioridadInicial: Int) {
 }
 
 fun main() {
-    val ticket = TicketSoporte("Ana García", 1)
+    val ticket = TicketSoporte("Ana Garcia", 1)
 
     ticket.escalarTicket(2)
     ticket.cerrarTicket(true)
 
-    println(ticket.titular)
-    println(ticket.consultarPrioridad())
+    println("Titular: ${ticket.titular}")
+    println("Prioridad final: ${ticket.consultarPrioridad()}")
 }

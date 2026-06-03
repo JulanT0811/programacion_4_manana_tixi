@@ -14,7 +14,7 @@ class PrioridadTicket(nivel: Int) {
 
     val etiqueta: String
         get() = when {
-            nivel >= 8 -> "Crítico"
+            nivel >= 8 -> "Critico"
             nivel >= 6 -> "Alto"
             nivel >= 4 -> "Medio"
             else -> "Bajo"

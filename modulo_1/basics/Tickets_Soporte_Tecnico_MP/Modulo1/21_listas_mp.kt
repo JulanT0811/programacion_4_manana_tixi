@@ -22,7 +22,7 @@ fun main() {
         println("Servidor: $servidor")
     }
 
-    println("\nListas-Mutable (Tecnicos de Turno)")
+    println("Listas-Mutable (Tecnicos de Turno)")
     val tecnicos = mutableListOf("juan", "pedro", "maria", "ana")
     println(tecnicos)
     tecnicos.add("jorge")
@@ -34,7 +34,7 @@ fun main() {
     tecnicos[1] = "luis"
     println(tecnicos)
     
-    println("\nArray Deque (Cola de Prioridad)")
+    println("Array Deque (Cola de Prioridad)")
     val deque = ArrayDeque<Int>()
     println(deque)
     deque.addFirst(101) 

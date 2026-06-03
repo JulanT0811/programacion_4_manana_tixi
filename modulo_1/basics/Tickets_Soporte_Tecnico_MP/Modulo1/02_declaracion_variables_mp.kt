@@ -14,7 +14,7 @@ fun main() {
     
 
     tiempoTranscurridoHoras = tiempoTranscurridoHoras + 1
-    estado = "Resuelto"
+    estado = "Resuelto"D
     
     println("<< RESUMEN DEL CASO >>")
     println("El ticket $ticketId de la categoría $categoria ha sido finalizado.")

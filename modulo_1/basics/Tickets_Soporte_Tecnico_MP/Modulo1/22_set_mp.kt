@@ -4,7 +4,7 @@ fun main() {
     val servidoresIds = setOf(101, 102, 103, 104, 108, 104, 101, 103)
     println("IDs de servidores: ${servidoresIds}")
   
-    println("\nOperaciones de conjuntos (Tickets por Area)")
+    println("Operaciones de conjuntos (Tickets por Area)")
     val ticketsRed = setOf(2, 4, 6, 8, 10)
     val ticketsSoftware = setOf(3, 6, 9, 12)
     
@@ -21,7 +21,7 @@ fun main() {
     println("Set de Red: ${ticketsRed}")
     println("Set de Software: ${ticketsSoftware}")
     
-    println("\nSet mutable (Etiquetas de Tecnologia)")
+    println("Set mutable (Etiquetas de Tecnologia)")
     val etiquetas = mutableSetOf("kotlin", "java", "reactnative")
     println(etiquetas)
     

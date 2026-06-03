@@ -1,6 +1,6 @@
 fun main() {
     println("Controles de Flujo when con condiciones arbitrarias")
-    println("Escriba código:") 
+    println("Escriba codigo:") 
     
     println("Prioridad del ticket (1-100):")
     val prioridad = readLine()?.toIntOrNull() ?: 0
@@ -14,7 +14,7 @@ fun main() {
     } else ""
 
     val costoServicio = when {
-        // Estructura idéntica al original
+       
         !tieneContrato && prioridad < 18 -> 0.0
         !tieneContrato && prioridad >= 65 -> 15.0
         !tieneContrato -> 45.0
@@ -24,5 +24,5 @@ fun main() {
         else -> 30.0
     }
 
-    println("Costo del servicio técnico: $${"%.2f".format(costoServicio)}")
+    println("Costo del servicio tecnico: $${"%.2f".format(costoServicio)}")
 }
