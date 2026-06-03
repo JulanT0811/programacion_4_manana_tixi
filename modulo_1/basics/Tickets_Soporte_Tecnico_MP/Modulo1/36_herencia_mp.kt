@@ -1,40 +1,29 @@
-// Sin open — no se puede heredar (protección por defecto)
-class Animal(val nombre: String)
-// class Perro : Animal("Rex")  // ERROR — Animal es final
+open class Ticket(val id: Int, val prioridad: String) {
+    open fun procesar() = println("Procesando ticket #$id con prioridad $prioridad")
+    open fun obtenerInfo() = "Ticket #$id"
 
-// Con open — la jerarquía está diseñada para ello
-open class Animal(val nombre: String, val sonido: String) {
-    // open — la subclase PUEDE sobreescribir
-    open fun hacerSonido() = println("$nombre dice: $sonido")
-    open fun descripcion() = "Soy $nombre"
-
-    // Sin open — la subclase NO puede sobreescribir
-    fun respirar() = println("$nombre respira")
+    fun registrarLog() = println("Log registrado para el ticket #$id")
 }
 
-// HERENCIA: Perro reutiliza todo de Animal y especializa hacerSonido
-class Perro(nombre: String) : Animal(nombre, "Guau") {
-    override fun hacerSonido() {
-        super.hacerSonido()          // reutiliza la implementación del padre
-        println("(mueve la cola)")   // añade comportamiento propio
+class TicketSoporteTecnico(id: Int) : Ticket(id, "Alta") {
+    override fun procesar() {
+        super.procesar()
+        println("(Notificando al equipo de ingeniería)")
     }
-    override fun descripcion() = "${super.descripcion()}, un perro"
+    override fun obtenerInfo() = "${super.obtenerInfo()}, tipo: Soporte Técnico"
 }
 
-class Gato(nombre: String, val interior: Boolean) : Animal(nombre, "Miau") {
-    override fun descripcion() =
-        "${super.descripcion()}, un gato ${if (interior) "de interior" else "callejero"}"
+class TicketConsultas(id: Int, val esUrgente: Boolean) : Ticket(id, "Baja") {
+    override fun obtenerInfo() =
+        "${super.obtenerInfo()}, tipo: Consulta ${if (esUrgente) "urgente" else "estándar"}"
 }
 
 fun main() {
-    val perro = Perro("Rex")
-    perro.hacerSonido()
-    // Rex dice: Guau
-    // (mueve la cola)
+    val ticketTecnico = TicketSoporteTecnico(101)
+    ticketTecnico.procesar()
 
-    val gato = Gato("Misi", true)
-    println(gato.descripcion())  // Soy Misi, un gato de interior
+    val ticketConsulta = TicketConsultas(102, true)
+    println(ticketConsulta.obtenerInfo())
 
-    // Herencia — Perro y Gato tienen todo lo de Animal más lo propio
-    perro.respirar()  // Rex respira — heredado de Animal
+    ticketTecnico.registrarLog()
 }

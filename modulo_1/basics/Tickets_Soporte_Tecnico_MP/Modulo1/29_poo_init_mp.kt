@@ -1,21 +1,18 @@
-class Usuario(val nombre: String, val email: String) {
-    val nombreNormalizado: String
-    val dominioEmail: String
+class TicketSoporte(val solicitante: String, val correo: String) {
+    val solicitanteNormalizado: String
+    val dominioCorreo: String
 
     init {
-        // Encapsulamiento en acción: validamos antes de construir
-        require(nombre.isNotBlank()) { "El nombre no puede estar vacío" }
-        require(email.contains("@")) { "Email inválido: $email" }
+        require(solicitante.isNotBlank()) { "El nombre del solicitante no puede estar vacío" }
+        require(correo.contains("@")) { "Correo electrónico inválido: $correo" }
 
-        nombreNormalizado = nombre.trim().lowercase()
-        dominioEmail      = email.substringAfter("@")
+        solicitanteNormalizado = solicitante.trim().lowercase()
+        dominioCorreo = correo.substringAfter("@")
     }
 }
 
 fun main() {
-    val u = Usuario("  Ana García  ", "ana@kotlin.dev")
-    println(u.nombreNormalizado)  // ana garcía
-    println(u.dominioEmail)       // kotlin.dev
-
-    // Usuario("", "invalido")   // IllegalArgumentException — require falla
+    val t = TicketSoporte("  Juan Pérez  ", "juan@soporte.com")
+    println(t.solicitanteNormalizado)
+    println(t.dominioCorreo)
 }

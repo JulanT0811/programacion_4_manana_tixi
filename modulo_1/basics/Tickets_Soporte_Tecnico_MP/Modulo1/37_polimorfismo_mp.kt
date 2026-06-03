@@ -1,65 +1,57 @@
-// La interfaz define el contrato — QUÉ puede hacer
-// Las implementaciones definen el CÓMO
-interface Pagable {
-    fun procesar(monto: Double): Boolean
-    val nombre: String
+interface Resoluble {
+    fun atender(ticketId: Int): Boolean
+    val tipo: String
 }
 
-class TarjetaCredito(val numero: String) : Pagable {
-    override val nombre = "Tarjeta de crédito"
-    override fun procesar(monto: Double): Boolean {
-        println("💳 Cargando $${"%.2f".format(monto)} a $numero")
+class SoporteTecnico(val departamento: String) : Resoluble {
+    override val tipo = "Soporte Técnico"
+    override fun atender(ticketId: Int): Boolean {
+        println("🛠️ Resolviendo ticket #$ticketId en $departamento")
         return true
     }
 }
 
-class PayPal(val email: String) : Pagable {
-    override val nombre = "PayPal"
-    override fun procesar(monto: Double): Boolean {
-        println("🅿️ Enviando $${"%.2f".format(monto)} a $email")
+class SoporteFacturacion(val email: String) : Resoluble {
+    override val tipo = "Facturación"
+    override fun atender(ticketId: Int): Boolean {
+        println("🧾 Gestionando cobros para ticket #$ticketId enviado a $email")
         return true
     }
 }
 
-class Efectivo : Pagable {
-    override val nombre = "Efectivo"
-    override fun procesar(monto: Double): Boolean {
-        println("💵 Recibiendo $${"%.2f".format(monto)} en efectivo")
-        return true
-    }
-}
-class Cheque(val numero: String) : Pagable {
-    override val nombre = "Cheque"
-    override fun procesar(monto: Double): Boolean {
-        println("💵 Recibiendo $${"%.2f".format(monto)} con cheque a $numero")
+class SoporteGeneral : Resoluble {
+    override val tipo = "Soporte General"
+    override fun atender(ticketId: Int): Boolean {
+        println("ℹ️ Atendiendo ticket #$ticketId de forma genérica")
         return true
     }
 }
 
-
-
-// Esta función no sabe ni le importa qué tipo de pago es
-// Solo sabe que recibe algo que implementa Pagable — POLIMORFISMO
-fun cobrar(monto: Double, metodoPago: Pagable) {
-    println("Procesando pago con ${metodoPago.nombre}...")
-    val exito = metodoPago.procesar(monto)
-    println(if (exito) "✅ Pago exitoso" else "❌ Pago fallido")
+class SoporteUrgente(val nivel: String) : Resoluble {
+    override val tipo = "Urgente"
+    override fun atender(ticketId: Int): Boolean {
+        println("🚨 Atendiendo ticket #$ticketId con prioridad $nivel")
+        return true
+    }
 }
 
-
+fun gestionarTicket(ticketId: Int, canal: Resoluble) {
+    println("Procesando solicitud a través de ${canal.tipo}...")
+    val exito = canal.atender(ticketId)
+    println(if (exito) "✅ Ticket resuelto" else "❌ Ticket pendiente")
+}
 
 fun main() {
-    val metodos: List<Pagable> = listOf(
-        TarjetaCredito("**** **** **** 1234"),
-        PayPal("ana@test.com"),
-        Efectivo(),
-        Cheque("**** ****111")
+    val canales: List<Resoluble> = listOf(
+        SoporteTecnico("Redes"),
+        SoporteFacturacion("admin@empresa.com"),
+        SoporteGeneral(),
+        SoporteUrgente("Crítica")
     )
 
-    // Misma función — comportamiento distinto según el tipo
-    metodos.forEach { cobrar(99.99, it) }
+    canales.forEach { gestionarTicket(501, it) }
 
-    for(page in metodos){
-        println("$page")
+    for (canal in canales) {
+        println("$canal")
     }
 }

@@ -1,18 +1,16 @@
-// El constructor primario integra la declaración de propiedades
-class Persona(val nombre: String, val edad: Int)
+class Ticket(val asunto: String, val nivelUrgencia: Int)
 
-// Con cuerpo adicional
-class Persona2(val nombre: String, val edad: Int) {
-    fun presentarse() = "Soy $nombre y tengo $edad años"
-    fun esMayorDeEdad() = edad >= 18
+class TicketDetallado(val asunto: String, val nivelUrgencia: Int) {
+    fun obtenerResumen() = "Ticket: $asunto con nivel de urgencia $nivelUrgencia"
+    fun esCritico() = nivelUrgencia >= 5
 }
 
 fun main() {
-    val p = Persona("Ana", 28)
-    println(p.nombre)   // Ana
-    println(p.edad)     // 28
+    val t = Ticket("Error de red", 3)
+    println(t.asunto)
+    println(t.nivelUrgencia)
 
-    val p2 = Persona2("Luis", 17)
-    println(p2.presentarse())     // Soy Luis y tengo 17 años
-    println(p2.esMayorDeEdad())   // false
+    val t2 = TicketDetallado("Fallo en servidor", 6)
+    println(t2.obtenerResumen())
+    println(t2.esCritico())
 }

@@ -37,14 +37,14 @@ fun main() {
     println("\nArray Deque (Cola de Prioridad)")
     val deque = ArrayDeque<Int>()
     println(deque)
-    deque.addFirst(101) // Agregar ticket al inicio
+    deque.addFirst(101) 
     println(deque)
-    deque.addLast(102)  // Agregar ticket al final
+    deque.addLast(102)  
     println(deque) 
     deque.addLast(103)
     println(deque)
-    deque.removeFirst() // Atender primer ticket
+    deque.removeFirst() 
     println(deque)
-    deque.removeLast()  // Cancelar ultimo ticket
+    deque.removeLast()  
     println(deque)
 }

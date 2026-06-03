@@ -1,43 +1,39 @@
-class CuentaBancaria(titular: String, saldoInicial: Double) {
+class TicketSoporte(titular: String, prioridadInicial: Int) {
 
-    val titular: String = titular       // público — cualquiera puede leer
+    val titular: String = titular
 
-    private var saldo: Double = saldoInicial  // privado — solo esta clase lo modifica
+    private var prioridad: Int = prioridadInicial
 
-    internal val numeroCuenta: String =        // internal — visible en el mismo módulo
-        "ES${(100000..999999).random()}"
+    internal val codigoTicket: String =
+        "TK-${(100000..999999).random()}"
 
-    protected open fun calcularInteres(): Double = saldo * 0.02  // protected — visible en subclases
+    protected open fun calcularPrioridadCompleta(): Int = prioridad + 1
 
-    // El saldo solo cambia a través de estos métodos — NUNCA directamente
-    fun depositar(monto: Double) {
-        require(monto > 0) { "El monto debe ser positivo" }
-        saldo += monto
-        println("Depositado: $${"%.2f".format(monto)} | Nuevo saldo: ${consultarSaldo()}")
+    fun escalarTicket(nivel: Int) {
+        require(nivel > 0) { "El nivel debe ser positivo" }
+        prioridad += nivel
+        println("Ticket escalado: Nivel aumentado | Prioridad actual: ${consultarPrioridad()}")
     }
 
-    fun retirar(monto: Double): Boolean {
-        require(monto > 0) { "El monto debe ser positivo" }
-        if (monto > saldo) {
-            println("Fondos insuficientes")
+    fun cerrarTicket(confirmado: Boolean): Boolean {
+        if (!confirmado) {
+            println("Cierre cancelado")
             return false
         }
-        saldo -= monto
-        println("Retirado: $${"%.2f".format(monto)} | Nuevo saldo: ${consultarSaldo()}")
+        prioridad = 0
+        println("Ticket cerrado correctamente")
         return true
     }
 
-    fun consultarSaldo(): String = "$${"%.2f".format(saldo)}"
+    fun consultarPrioridad(): String = prioridad.toString()
 }
 
 fun main() {
-    val cuenta = CuentaBancaria("Ana García", 1000.0)
+    val ticket = TicketSoporte("Ana García", 1)
 
-    cuenta.depositar(500.0)    // Depositado: $500.00 | Nuevo saldo: $1500.00
-    cuenta.retirar(200.0)      // Retirado: $200.00 | Nuevo saldo: $1300.00
-    cuenta.retirar(2000.0)     // Fondos insuficientes
+    ticket.escalarTicket(2)
+    ticket.cerrarTicket(true)
 
-    println(cuenta.titular)         // Ana García — acceso público permitido
-    println(cuenta.consultarSaldo()) // $1300.00
-    // cuenta.saldo = 999999.0       // ERROR — saldo es privado
+    println(ticket.titular)
+    println(ticket.consultarPrioridad())
 }

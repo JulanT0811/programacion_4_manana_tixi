@@ -1,63 +1,59 @@
 data class Categoria(val id: Int, val nombre: String)
 
-data class Producto(
-    val id:        Int,
-    val nombre:    String,
-    val precio:    Double,
-    val stock:     Int,
+data class Ticket(
+    val id: Int,
+    val asunto: String,
+    val prioridad: Int,
+    val stockAsignado: Int,
     val categoria: Categoria,
-    val activo:    Boolean = true
+    val activo: Boolean = true
 ) {
-    // ABSTRACCIÓN: el usuario consulta disponible sin saber la lógica
-    val disponible: Boolean get() = activo && stock > 0
-    val precioConIva: Double get() = precio * 1.19
+    val disponible: Boolean get() = activo && stockAsignado > 0
+    val prioridadImpacto: Double get() = prioridad * 1.5
 
-    // Devuelve una copia — inmutabilidad como forma de encapsulamiento
-    fun aplicarDescuento(porcentaje: Double): Producto {
-        require(porcentaje in 0.0..100.0) { "Descuento debe ser entre 0 y 100" }
-        return copy(precio = precio * (1 - porcentaje / 100))
+    fun aplicarEscalado(factor: Double): Ticket {
+        require(factor in 0.0..10.0) { "Factor debe ser entre 0 y 10" }
+        return copy(prioridad = (prioridad * factor).toInt())
     }
 }
 
-// ENCAPSULAMIENTO: el estado del catálogo es privado y mutable internamente
-object CatalogoProductos {
+object GestorTickets {
     private val categorias = mutableListOf(
-        Categoria(1, "Periféricos"),
-        Categoria(2, "Pantallas"),
-        Categoria(3, "Audio")
+        Categoria(1, "Redes"),
+        Categoria(2, "Hardware"),
+        Categoria(3, "Software")
     )
-    private val productos   = mutableListOf<Producto>()
+    private val tickets = mutableListOf<Ticket>()
     private var siguienteId = 1
 
-    fun agregarProducto(nombre: String, precio: Double, stock: Int, categoriaId: Int): Producto? {
+    fun agregarTicket(asunto: String, prioridad: Int, stock: Int, categoriaId: Int): Ticket? {
         val categoria = categorias.find { it.id == categoriaId } ?: return null
-        val producto  = Producto(siguienteId++, nombre, precio, stock, categoria)
-        productos.add(producto)
-        return producto
+        val ticket = Ticket(siguienteId++, asunto, prioridad, stock, categoria)
+        tickets.add(ticket)
+        return ticket
     }
 
-    // ABSTRACCIÓN: interfaz pública limpia — solo lectura de listas
-    fun listar(): List<Producto>              = productos.toList()
-    fun disponibles(): List<Producto>         = productos.filter { it.disponible }
-    fun porCategoria(id: Int): List<Producto> = productos.filter { it.categoria.id == id }
-    fun buscar(query: String): List<Producto> =
-        productos.filter { it.nombre.contains(query, ignoreCase = true) }
+    fun listar(): List<Ticket> = tickets.toList()
+    fun activos(): List<Ticket> = tickets.filter { it.disponible }
+    fun porCategoria(id: Int): List<Ticket> = tickets.filter { it.categoria.id == id }
+    fun buscar(query: String): List<Ticket> =
+        tickets.filter { it.asunto.contains(query, ignoreCase = true) }
 }
 
 fun main() {
-    CatalogoProductos.agregarProducto("Teclado mecánico",   89.99, 15, 1)
-    CatalogoProductos.agregarProducto("Mouse inalámbrico",  29.99,  0, 1)
-    CatalogoProductos.agregarProducto("Monitor 27\"",      349.99,  5, 2)
-    CatalogoProductos.agregarProducto("Auriculares BT",    149.99,  8, 3)
+    GestorTickets.agregarTicket("Fallo de red", 5, 2, 1)
+    GestorTickets.agregarTicket("Monitor apagado", 2, 0, 2)
+    GestorTickets.agregarTicket("Error de compilación", 8, 1, 3)
+    GestorTickets.agregarTicket("Actualización OS", 4, 3, 3)
 
-    println("=== Todos los productos ===")
-    CatalogoProductos.listar().forEach { p ->
-        val estado = if (p.disponible) "✅" else "❌"
-        println("$estado ${p.nombre} — ${"%.2f".format(p.precioConIva)} (con IVA)")
+    println("=== Todos los tickets ===")
+    GestorTickets.listar().forEach { t ->
+        val estado = if (t.disponible) "✅" else "❌"
+        println("$estado ${t.asunto} — Prioridad: ${t.prioridadImpacto}")
     }
 
-    println("\n=== Disponibles con 10% descuento ===")
-    CatalogoProductos.disponibles()
-        .map { it.aplicarDescuento(10.0) }
-        .forEach { println("  ${it.nombre}: ${"%.2f".format(it.precio)}") }
+    println("\n=== Activos con escalado de prioridad ===")
+    GestorTickets.activos()
+        .map { it.aplicarEscalado(1.2) }
+        .forEach { println("  ${it.asunto}: ${it.prioridad}") }
 }

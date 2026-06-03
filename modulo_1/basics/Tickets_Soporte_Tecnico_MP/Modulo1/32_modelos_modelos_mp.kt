@@ -1,33 +1,28 @@
-data class Producto(
-    val id:        Int,
-    val nombre:    String,
-    val precio:    Double,
-    val categoria: String,
-    val activo:    Boolean = true
+data class Ticket(
+    val id: Int,
+    val titulo: String,
+    val prioridad: Int,
+    val departamento: String,
+    val resuelto: Boolean = false
 )
 
 fun main() {
-    val p1 = Producto(1, "Teclado mecánico", 89.99, "Periféricos")
-    val p2 = Producto(1, "Teclado mecánico", 89.99, "Periféricos")
-    val p3 = Producto(2, "Monitor 27\"",     349.99, "Pantallas")
+    val t1 = Ticket(101, "Error de red", 5, "Soporte Técnico")
+    val t2 = Ticket(101, "Error de red", 5, "Soporte Técnico")
+    val t3 = Ticket(102, "Fallo de hardware", 9, "Infraestructura")
 
-    // toString() automático
-    println(p1)  // Producto(id=1, nombre=Teclado mecánico, ...)
+    println(t1)
 
-    // equals() por valor
-    println(p1 == p2)   // true
-    println(p1 == p3)   // false
+    println(t1 == t2)
+    println(t1 == t3)
 
-    // copy() — nuevo objeto con cambios puntuales
-    val barato   = p1.copy(precio = 59.99)
-    val inactivo = p1.copy(activo = false)
+    val prioridadAlta = t1.copy(prioridad = 10)
+    val ticketResuelto = t1.copy(resuelto = true)
 
-    // Desestructuración
-    val (id, nombre, precio) = p1
-    println("$id: $nombre — $$precio")
+    val (id, titulo, prioridad) = t1
+    println("$id: $titulo — Prioridad: $prioridad")
 
-    // En bucles
-    listOf(p1, p3).forEach { (id2, nombre2, precio2) ->
-        println("[$id2] $nombre2: $$precio2")
+    listOf(t1, t3).forEach { (id2, titulo2, prioridad2) ->
+        println("[$id2] $titulo2: Prioridad $prioridad2")
     }
 }

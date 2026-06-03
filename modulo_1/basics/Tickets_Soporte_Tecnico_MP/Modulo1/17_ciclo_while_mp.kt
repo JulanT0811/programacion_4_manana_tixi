@@ -51,15 +51,14 @@ fun main() {
   
     println("For con continue y break combinado")
     for (i in 1..10) {
-        if (i == 3) continue // Ignorar mantenimiento preventivo
-        if (i == 7) {
+        if (i == 3) continue 
             println("Limite de tickets por turno alcanzado.")
             break
         }
         println("Atendiendo incidencia #$i")
     }
 
-    // Estructura de Triple adaptada a Servidores (ID, Latencia, Uso CPU %)
+
     val servidores = listOf(
         Triple("Servidor-Web", 45.5, 30),
         Triple("Base-Datos", 120.2, 85),

@@ -1,13 +1,10 @@
-class PuntoInmutable(val x: Double, val y: Double)   // solo lectura
+class TicketInmutable(val id: Int, val prioridad: Int)
 
-class Contador(var valor: Int = 0) {                  // lectura y escritura
-    fun incrementar() { valor++ }
-    fun resetear()    { valor = 0 }
+class ContadorTickets(var cantidad: Int = 0) {
+    fun registrarTicket() { cantidad++ }
+    fun limpiarContador() { cantidad = 0 }
 }
 
-// Sin val/var — parámetro del constructor, NO propiedad
-// Solo accesible dentro del bloque init
-class Temporal(nombre: String) {
-    val nombreUpper = nombre.uppercase()
-    // nombre no existe fuera de aquí
+class RegistroTemporal(asunto: String) {
+    val asuntoMayusculas = asunto.uppercase()
 }

@@ -1,20 +1,19 @@
-class Rectangulo(val ancho: Double, val alto: Double) {
-    val area:      Double get() = ancho * alto
-    val perimetro: Double get() = 2 * (ancho + alto)
+class TicketSoporte(val anchoPrioridad: Double, val altoSeveridad: Double) {
+    val impacto: Double get() = anchoPrioridad * altoSeveridad
+    val esfuerzo: Double get() = 2 * (anchoPrioridad + altoSeveridad)
 
-    // Siempre llaman al constructor primario con this(...)
-    constructor(lado: Double) : this(lado, lado)
+    constructor(valorUnico: Double) : this(valorUnico, valorUnico)
     constructor(ancho: Int, alto: Int) : this(ancho.toDouble(), alto.toDouble())
 
-    override fun toString() = "Rectángulo(${ancho}x${alto}) | área=${area}"
+    override fun toString() = "Ticket(${anchoPrioridad}x${altoSeveridad}) | impacto=${impacto}"
 }
 
 fun main() {
-    val r1 = Rectangulo(5.0, 3.0)
-    val r2 = Rectangulo(4.0)        // cuadrado
-    val r3 = Rectangulo(6, 2)       // con Int
+    val t1 = TicketSoporte(5.0, 3.0)
+    val t2 = TicketSoporte(4.0)
+    val t3 = TicketSoporte(6, 2)
 
-    println(r1)  // Rectángulo(5.0x3.0) | área=15.0
-    println(r2)  // Rectángulo(4.0x4.0) | área=16.0
-    println(r3)  // Rectángulo(6.0x2.0) | área=12.0
+    println(t1)
+    println(t2)
+    println(t3)
 }

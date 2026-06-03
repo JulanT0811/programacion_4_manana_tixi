@@ -1,36 +1,31 @@
-class Temperatura(celsius: Double) {
+class PrioridadTicket(nivel: Int) {
 
-    // ENCAPSULAMIENTO: el setter valida antes de asignar
-    var celsius: Double = celsius
+    var nivel: Int = nivel
         set(value) {
-            require(value >= -273.15) { "Temperatura bajo el cero absoluto" }
-            field = value  // 'field' es el backing field
+            require(value in 1..10) { "La prioridad debe estar entre 1 y 10" }
+            field = value
         }
 
-    // ABSTRACCIÓN: el usuario consulta fahrenheit sin saber la fórmula
-    val fahrenheit: Double
-        get() = celsius * 9.0 / 5.0 + 32.0
+    val esUrgente: Boolean
+        get() = nivel >= 8
 
-    val kelvin: Double
-        get() = celsius + 273.15
+    val esInformativo: Boolean
+        get() = nivel <= 3
 
-    val descripcion: String
+    val etiqueta: String
         get() = when {
-            celsius < 0  -> "Bajo cero"
-            celsius < 15 -> "Frío"
-            celsius < 25 -> "Templado"
-            celsius < 35 -> "Caluroso"
-            else         -> "Muy caluroso"
+            nivel >= 8 -> "Crítico"
+            nivel >= 6 -> "Alto"
+            nivel >= 4 -> "Medio"
+            else -> "Bajo"
         }
 }
 
 fun main() {
-    val temp = Temperatura(20.0)
-    println("${temp.celsius}°C = ${temp.fahrenheit}°F = ${temp.kelvin}K")
-    println(temp.descripcion)  // Templado
+    val ticket = PrioridadTicket(7)
+    println("Prioridad: ${ticket.nivel} | Etiqueta: ${ticket.etiqueta}")
+    println("¿Es urgente?: ${ticket.esUrgente}")
 
-    temp.celsius = -5.0
-    println("${temp.celsius}°C → ${temp.descripcion}")  // Bajo cero
-
-    // temp.celsius = -300.0  // IllegalArgumentException
+    ticket.nivel = 9
+    println("Nueva prioridad: ${ticket.nivel} → ${ticket.etiqueta}")
 }

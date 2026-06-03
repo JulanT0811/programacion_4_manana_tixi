@@ -1,25 +1,21 @@
-// El usuario de esta clase solo sabe QUÉ puede hacer con un Producto
-// No necesita saber cómo se calcula precioConIva ni cómo funciona disponible
-class Producto(
-    val id:       Int,
-    val nombre:   String,
-    val precio:   Double,
-    private val stock: Int      // privado — el usuario no manipula el stock directamente
+class TicketSoporte(
+    val id: Int,
+    val titulo: String,
+    val prioridad: Int,
+    private val estadoProcesado: Boolean
 ) {
-    val precioConIva: Double    // interfaz pública — qué puede consultar
-        get() = precio * 1.19
+    val esUrgente: Boolean
+        get() = prioridad > 5
 
-    val disponible: Boolean
-        get() = stock > 0
+    val puedeCerrarse: Boolean
+        get() = estadoProcesado
 
-    override fun toString() = "$nombre ($${"%.2f".format(precio)})"
+    override fun toString() = "Ticket #$id: $titulo [Prioridad: $prioridad]"
 }
 
 fun main() {
-    val teclado = Producto(1, "Teclado mecánico", 89.99, 15)
+    val ticket = TicketSoporte(501, "Error en inicio de sesión", 8, true)
 
-    // El código externo usa la interfaz pública — no sabe el detalle interno
-    println(teclado.disponible)   // true
-    println(teclado.precioConIva) // 106.99
-    // teclado.stock = 0           // ERROR — privado, protegido por diseño
+    println(ticket.esUrgente)
+    println(ticket.puedeCerrarse)
 }

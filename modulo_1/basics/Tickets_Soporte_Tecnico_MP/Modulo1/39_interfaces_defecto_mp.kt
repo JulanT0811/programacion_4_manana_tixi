@@ -1,52 +1,50 @@
-interface Serializable {
-    val id: String                    // abstracta — debe implementarse
-    fun serializar(): String          // abstracta — debe implementarse
-    val version: Int get() = 1        // con default — puede sobreescribirse
+interface Exportable {
+    val idTicket: String
+    fun exportar(): String
+    val formato: String get() = "CSV"
 }
 
-interface Validable {
-    val errores: List<String>
-    val esValido: Boolean get() = errores.isEmpty()
+interface Verificable {
+    val reportes: List<String>
+    val estaAprobado: Boolean get() = reportes.isEmpty()
 
-    fun validar(): Boolean
-    fun imprimirErrores() {                // implementación por defecto
-        if (errores.isEmpty()) println("Sin errores")
-        else errores.forEach { println("  ❌ $it") }
+    fun verificar(): Boolean
+    fun listarReportes() {
+        if (reportes.isEmpty()) println("Sin incidencias")
+        else reportes.forEach { println("  ⚠️ $it") }
     }
 }
 
-// POLIMORFISMO: Pedido puede usarse donde se espere Serializable O Validable
-data class Pedido(
-    override val id: String,
-    val cliente:     String,
-    val items:       List<String>,
-    val total:       Double
-) : Serializable, Validable {
+data class TicketSoporte(
+    override val idTicket: String,
+    val usuario: String,
+    val descripcion: String,
+    val prioridad: Int
+) : Exportable, Verificable {
 
-    override fun serializar() =
-        "$id|$cliente|${items.joinToString(",")}|$total"
+    override fun exportar() =
+        "$idTicket|$usuario|$descripcion|$prioridad"
 
-    override val errores: List<String> get() = buildList {
-        if (cliente.isBlank()) add("El cliente no puede estar vacío")
-        if (items.isEmpty())   add("El pedido debe tener al menos un item")
-        if (total <= 0)        add("El total debe ser mayor que cero")
+    override val reportes: List<String> get() = buildList {
+        if (usuario.isBlank()) add("El usuario no puede estar vacío")
+        if (descripcion.length < 10) add("La descripción es demasiado corta")
+        if (prioridad !in 1..10) add("La prioridad debe estar entre 1 y 10")
     }
 
-    override fun validar() = esValido
+    override fun verificar() = estaAprobado
 }
 
 fun main() {
-    val pedido1 = Pedido("P001", "Ana", listOf("Teclado", "Mouse"), 119.98)
-    val pedido2 = Pedido("P002", "",    emptyList(),                -5.0)
+    val ticket1 = TicketSoporte("T001", "Carlos", "Fallo en conexión de red", 8)
+    val ticket2 = TicketSoporte("T002", "", "Error", 15)
 
-    // Polimorfismo por interfaz
-    fun procesarSerializable(s: Serializable) = println("→ ${s.serializar()}")
-    fun procesarValidable(v: Validable) {
-        println("Válido: ${v.esValido}")
-        v.imprimirErrores()
+    fun procesarExportable(e: Exportable) = println("→ ${e.exportar()}")
+    fun procesarVerificable(v: Verificable) {
+        println("Aprobado: ${v.estaAprobado}")
+        v.listarReportes()
     }
 
-    procesarSerializable(pedido1)   // → P001|Ana|Teclado,Mouse|119.98
-    procesarValidable(pedido1)      // Válido: true / Sin errores
-    procesarValidable(pedido2)      // Válido: false / ❌ ...
+    procesarExportable(ticket1)
+    procesarVerificable(ticket1)
+    procesarVerificable(ticket2)
 }

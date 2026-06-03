@@ -1,31 +1,31 @@
-enum class Estado(val descripcion: String, val esTerminal: Boolean) {
-    PENDIENTE  ("Esperando procesamiento", false),
-    EN_PROCESO ("Siendo procesado",        false),
-    COMPLETADO ("Finalizado con éxito",    true),
-    FALLIDO    ("Finalizado con error",    true),
-    CANCELADO  ("Cancelado por usuario",   true);
+enum class EstadoTicket(val descripcion: String, val esTerminal: Boolean) {
+    NUEVO      ("Ticket recibido",        false),
+    ASIGNADO   ("Asignado a técnico",     false),
+    EN_PROCESO ("Siendo solucionado",     false),
+    RESUELTO   ("Solucionado con éxito",  true),
+    CERRADO    ("Ticket cerrado",         true);
 
-    fun puedeTransicionarA(siguiente: Estado): Boolean = when (this) {
-        PENDIENTE  -> siguiente == EN_PROCESO || siguiente == CANCELADO
-        EN_PROCESO -> siguiente == COMPLETADO || siguiente == FALLIDO
+    fun puedeTransicionarA(siguiente: EstadoTicket): Boolean = when (this) {
+        NUEVO      -> siguiente == ASIGNADO
+        ASIGNADO   -> siguiente == EN_PROCESO
+        EN_PROCESO -> siguiente == RESUELTO || siguiente == CERRADO
         else       -> false
     }
 }
 
 fun main() {
-    val estado = Estado.EN_PROCESO
-    println(estado.descripcion)  // Siendo procesado
-    println(estado.esTerminal)   // false
+    val estado = EstadoTicket.EN_PROCESO
+    println(estado.descripcion)
+    println(estado.esTerminal)
 
-    // when exhaustivo — sin else porque el compilador conoce todos los casos
     val icono = when (estado) {
-        Estado.PENDIENTE   -> "⏰"
-        Estado.EN_PROCESO  -> "⏳"
-        Estado.COMPLETADO  -> "✅"
-        Estado.FALLIDO     -> "❌"
-        Estado.CANCELADO   -> "🚫"
+        EstadoTicket.NUEVO      -> "📥"
+        EstadoTicket.ASIGNADO   -> "👤"
+        EstadoTicket.EN_PROCESO -> "🛠️"
+        EstadoTicket.RESUELTO   -> "✅"
+        EstadoTicket.CERRADO    -> "🔒"
     }
-    println(icono)  // ⏳
+    println(icono)
 
-    println(estado.puedeTransicionarA(Estado.COMPLETADO))  // true
+    println(estado.puedeTransicionarA(EstadoTicket.RESUELTO))
 }

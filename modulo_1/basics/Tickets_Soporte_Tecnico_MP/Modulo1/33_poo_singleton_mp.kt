@@ -1,30 +1,28 @@
-object Configuracion {
-    val host:    String = "api.ejemplo.com"
-    val puerto:  Int    = 443
-    private val apiKey: String = "sk-secreto-123"   // privado — nunca expuesto
+object ConfiguracionTicket {
+    val servidor: String = "soporte.empresa.com"
+    val puerto: Int = 8080
+    private val tokenAcceso: String = "tk-secreto-987"
 
-    fun baseUrl() = "https://$host:$puerto"
-    fun headers() = mapOf("Authorization" to "Bearer $apiKey")
+    fun urlBase() = "https://$servidor:$puerto"
+    fun cabeceras() = mapOf("Authorization" to "Bearer $tokenAcceso")
 }
 
-class Usuario private constructor(val id: Int, val nombre: String) {
+class Ticket private constructor(val id: Int, val asunto: String) {
     companion object {
-        private var contadorId = 0
+        private var contadorTickets = 0
 
-        // Factory function — encapsulamiento del constructor
-        fun crear(nombre: String, email: String): Usuario? {
-            if (nombre.isBlank() || !email.contains("@")) return null
-            return Usuario(++contadorId, nombre.trim())
+        fun crear(asunto: String, categoria: String): Ticket? {
+            if (asunto.isBlank() || categoria.isBlank()) return null
+            return Ticket(++contadorTickets, asunto.trim())
         }
 
-        const val ROL_DEFECTO = "viewer"
+        const val ESTADO_DEFECTO = "abierto"
     }
 }
 
 fun main() {
-    println(Configuracion.baseUrl())  // https://api.ejemplo.com:443
-    // Configuracion.apiKey            // ERROR — privado
+    println(ConfiguracionTicket.urlBase())
 
-    val u = Usuario.crear("Ana", "ana@test.com")
-    println(u)  // Usuario(id=1, nombre=Ana García)
+    val t = Ticket.crear("Fallo de conexión", "Redes")
+    println(t)
 }

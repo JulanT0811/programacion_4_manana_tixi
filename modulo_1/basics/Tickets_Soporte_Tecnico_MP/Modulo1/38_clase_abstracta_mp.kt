@@ -1,50 +1,46 @@
-abstract class Figura(val nombre: String) {
-    // abstract — las subclases DEBEN implementar esto (herencia forzada)
-    abstract val area: Double
-    abstract val perimetro: Double
+abstract class Ticket(val tipo: String) {
+    abstract val prioridad: Int
+    abstract val cargaTrabajo: Int
     abstract fun descripcion(): String
 
-    // concreto — disponible en todas las subclases (reutilización)
-    fun comparar(otra: Figura): String = when {
-        area > otra.area -> "$nombre es más grande que ${otra.nombre}"
-        area < otra.area -> "$nombre es más pequeña que ${otra.nombre}"
-        else             -> "$nombre y ${otra.nombre} tienen la misma área"
+    fun compararPrioridad(otro: Ticket): String = when {
+        prioridad > otro.prioridad -> "$tipo tiene mayor prioridad que ${otro.tipo}"
+        prioridad < otro.prioridad -> "$tipo tiene menor prioridad que ${otro.tipo}"
+        else -> "$tipo y ${otro.tipo} tienen la misma prioridad"
     }
 
-    // Polimorfismo: toString usa area y descripcion que son polimórficas
-    override fun toString() = "${descripcion()} | Área: ${"%.2f".format(area)}"
+    override fun toString() = "${descripcion()} | Prioridad: $prioridad"
 }
 
-class Circulo(val radio: Double) : Figura("Círculo") {
-    override val area:       Double get() = Math.PI * radio * radio
-    override val perimetro:  Double get() = 2 * Math.PI * radio
-    override fun descripcion() = "Círculo de radio $radio"
+class TicketTecnico(val nivelDificultad: Int) : Ticket("Soporte Técnico") {
+    override val prioridad: Int get() = nivelDificultad * 2
+    override val cargaTrabajo: Int get() = nivelDificultad * 5
+    override fun descripcion() = "Ticket técnico de nivel $nivelDificultad"
 }
 
-class Rectangulo(val ancho: Double, val alto: Double) : Figura("Rectángulo") {
-    override val area:       Double get() = ancho * alto
-    override val perimetro:  Double get() = 2 * (ancho + alto)
-    override fun descripcion() = "Rectángulo de ${ancho}x${alto}"
+class TicketFacturacion(val monto: Double) : Ticket("Facturación") {
+    override val prioridad: Int get() = if (monto > 1000) 10 else 5
+    override val cargaTrabajo: Int get() = 2
+    override fun descripcion() = "Ticket de facturación por $$monto"
 }
 
-class TrianguloEquilatero(val lado: Double) : Figura("Triángulo") {
-    override val area:       Double get() = (Math.sqrt(3.0) / 4) * lado * lado
-    override val perimetro:  Double get() = 3 * lado
-    override fun descripcion() = "Triángulo equilátero de lado $lado"
+class TicketConsulta(val tiempoEspera: Int) : Ticket("Consulta") {
+    override val prioridad: Int get() = if (tiempoEspera > 24) 8 else 3
+    override val cargaTrabajo: Int get() = 1
+    override fun descripcion() = "Ticket de consulta con espera de $tiempoEspera horas"
 }
 
 fun main() {
-    // POLIMORFISMO: la lista acepta cualquier Figura
-    val figuras: List<Figura> = listOf(
-        Circulo(5.0),
-        Rectangulo(4.0, 6.0),
-        TrianguloEquilatero(8.0)
+    val tickets: List<Ticket> = listOf(
+        TicketTecnico(4),
+        TicketFacturacion(1500.0),
+        TicketConsulta(48)
     )
 
-    figuras.forEach { println(it) }  // toString polimórfico
+    tickets.forEach { println(it) }
 
-    val mayor = figuras.maxByOrNull { it.area }
-    println("\nFigura más grande: ${mayor?.nombre}")
+    val urgente = tickets.maxByOrNull { it.prioridad }
+    println("\nTicket más urgente: ${urgente?.tipo}")
 
-    println(figuras[0].comparar(figuras[1]))
+    println(tickets[0].compararPrioridad(tickets[1]))
 }

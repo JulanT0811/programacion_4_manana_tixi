@@ -19,8 +19,8 @@ fun main() {
     contador = 1
     while(contador <= 10){
         contador++
-        if(contador == 3) continue // Saltar solicitud de mantenimiento
-        if(contador == 7) break    // Detener por error en base de datos
+        if(contador == 3) continue 
+        if(contador == 7) break    
         println("Solicitud ID: $contador procesada")
     }
    
@@ -70,8 +70,7 @@ fun main() {
     repeat(mediciones){ i ->
         println("Medicion ${i + 1} (paquetes por segundo en 15 seg.)")
         val paquetes = readLine()?.toIntOrNull() ?: 0
-        totalCarga += paquetes * 4 // Proyectado a 60 segundos
-    }
+        totalCarga += paquetes * 4 
 
     if (mediciones > 0) {
         val promedioCarga = totalCarga / mediciones

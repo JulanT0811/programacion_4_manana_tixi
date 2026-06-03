@@ -1,74 +1,70 @@
-// ABSTRACCIÓN: sealed class define los tipos posibles de notificación
-sealed class Notificacion(val titulo: String, val mensaje: String) {
-    abstract fun formatear(): String  // cada tipo formatea de forma distinta
+sealed class ActualizacionTicket(val idTicket: Int, val detalle: String) {
+    abstract fun formatear(): String
 
-    data class Email(
+    data class Correo(
         val destinatario: String,
-        val asunto:       String,
-        val cuerpo:       String
-    ) : Notificacion(asunto, cuerpo) {
+        val asunto: String,
+        val cuerpo: String
+    ) : ActualizacionTicket(0, cuerpo) {
         override fun formatear() =
-            "📧 Email → $destinatario\n   Asunto: $titulo\n   ${mensaje.take(50)}..."
+            "📧 Correo → $destinatario\n   Asunto: $asunto\n   ${detalle.take(50)}..."
     }
 
-    data class Push(val dispositivo: String, val icono: String = "🔔")
-        : Notificacion("Push", "") {
-        override fun formatear() = "$icono Push → $dispositivo: $titulo"
+    data class NotificacionApp(val dispositivo: String, val icono: String = "🔔")
+        : ActualizacionTicket(0, "") {
+        override fun formatear() = "$icono App → $dispositivo: Actualización en ticket"
     }
 
-    data class Sms(val telefono: String, val texto: String)
-        : Notificacion("SMS", texto) {
+    data class MensajeSms(val telefono: String, val texto: String)
+        : ActualizacionTicket(0, texto) {
         override fun formatear() = "📱 SMS → $telefono: ${texto.take(160)}"
     }
 
-    object Silenciosa : Notificacion("", "") {
-        override fun formatear() = "🔕 Notificación silenciosa"
+    object RegistroInterno : ActualizacionTicket(0, "") {
+        override fun formatear() = "📋 Registro interno de ticket"
     }
 }
 
-// ABSTRACCIÓN + POLIMORFISMO: interfaz con contrato genérico
-interface EnviadorNotificacion {
-    val nombre: String
-    fun enviar(notificacion: Notificacion): Boolean
+interface ProcesadorActualizacion {
+    val canal: String
+    fun ejecutar(actualizacion: ActualizacionTicket): Boolean
 }
 
-// HERENCIA: implementaciones concretas del mismo contrato
-class ServicioEmail : EnviadorNotificacion {
-    override val nombre = "Email"
-    override fun enviar(n: Notificacion): Boolean {
-        if (n !is Notificacion.Email) return false
-        println("  [EMAIL] → ${n.destinatario}")
+class ServicioCorreo : ProcesadorActualizacion {
+    override val canal = "Correo"
+    override fun ejecutar(a: ActualizacionTicket): Boolean {
+        if (a !is ActualizacionTicket.Correo) return false
+        println("  [CORREO] → ${a.destinatario}")
         return true
     }
 }
 
-class ServicioPush : EnviadorNotificacion {
-    override val nombre = "Push"
-    override fun enviar(n: Notificacion): Boolean {
-        if (n !is Notificacion.Push) return false
-        println("  [PUSH] → ${n.dispositivo}")
+class ServicioApp : ProcesadorActualizacion {
+    override val canal = "App"
+    override fun ejecutar(a: ActualizacionTicket): Boolean {
+        if (a !is ActualizacionTicket.NotificacionApp) return false
+        println("  [APP] → ${a.dispositivo}")
         return true
     }
 }
 
-// ENCAPSULAMIENTO: la lista de servicios es privada
-class Dispatcher(private val servicios: List<EnviadorNotificacion>) {
+class DespachadorTickets(private val servicios: List<ProcesadorActualizacion>) {
 
-    fun enviar(notificacion: Notificacion) {
-        println(notificacion.formatear())  // POLIMORFISMO: cada tipo formatea distinto
-        val exito = servicios.any { it.enviar(notificacion) }
-        if (!exito) println("  ⚠️ Sin servicio disponible")
+    fun procesar(actualizacion: ActualizacionTicket) {
+        println(actualizacion.formatear())
+        val exito = servicios.any { it.ejecutar(actualizacion) }
+        if (!exito) println("  ⚠️ Sin canal de notificación disponible")
         println()
     }
 }
 
 fun main() {
-    val dispatcher = Dispatcher(listOf(ServicioEmail(), ServicioPush()))
+    val despachador = DespachadorTickets(listOf(ServicioCorreo(), ServicioApp()))
 
     listOf(
-        Notificacion.Email("ana@test.com", "Bienvenida", "Gracias por registrarte."),
-        Notificacion.Push("iPhone-Ana"),
-        Notificacion.Sms("+34600000000", "Tu código es 1234"),
-        Notificacion.Silenciosa
-    ).forEach { dispatcher.enviar(it) }
+        ActualizacionTicket.Correo("cliente@test.com", "Ticket Actualizado", "El estado cambió a resuelto."),
+        ActualizacionTicket.NotificacionApp("Android-Carlos"),
+        ActualizacionTicket.MensajeSms("+593999999999", "Tu ticket ha sido escalado"),
+        ActualizacionTicket.RegistroInterno
+    ).forEach { despachador.procesar(it) }
 }
