@@ -24,6 +24,7 @@ import com.shopapp.theme.*
 fun LoginScreen(
     onLoginSuccess:  (isStaff: Boolean) -> Unit,
     onNavigateToRegister: () -> Unit,
+    onNavigateToForgotPassword: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -118,7 +119,22 @@ fun LoginScreen(
                         keyboardType  = KeyboardType.Password,
                         imeAction     = ImeAction.Done,
                     )
-                    Spacer(Modifier.height(24.dp))
+
+                    // Olvidé mi contraseña
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        TextButton(onClick = onNavigateToForgotPassword) {
+                            Text(
+                                text = "¿Olvidaste tu contraseña?",
+                                color = Accent,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                    }
+
+                    Spacer(Modifier.height(16.dp))
 
                     // Botón
                     ShopButton(
