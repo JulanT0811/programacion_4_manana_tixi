@@ -15,11 +15,13 @@ interface AuthRepository {
     suspend fun logout(): Result<Unit>
     suspend fun getStoredUser(): TokenDataStore.UserSnapshot?
     suspend fun isLoggedIn(): Boolean
-    suspend fun forgotPassword(email: String): Result<Unit>
-    suspend fun resetPasswordConfirm(
-        uid: String,
-        token: String,
-        newPassword: String,
-        reNewPassword: String
-    ): Result<Unit>
+
+    // ── Recuperación de contraseña ───────────────────────────────────────────
+    suspend fun requestReset(email: String): Result<String>
+    suspend fun confirmReset(
+        uid:          String,
+        token:        String,
+        newPassword:  String,
+        newPassword2: String,
+    ): Result<String>
 }
