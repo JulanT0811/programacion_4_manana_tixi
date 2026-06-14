@@ -3,10 +3,10 @@ package com.shopapp.presentation.navigation
 
 sealed class Screen(val route: String) {
     // Auth
-    data object Login          : Screen("login")
-    data object Register       : Screen("register")
-    data object ForgotPassword : Screen("forgot_password")
-    data object ResetPassword  : Screen("reset_password")
+    data object Login                : Screen("login")
+    data object Register             : Screen("register")
+    data object ForgotPassword       : Screen("forgot-password")
+    data object ResetPasswordConfirm : Screen("reset-password-confirm")
 
     // Public
     data object Home     : Screen("home")
