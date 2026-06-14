@@ -8,4 +8,6 @@ sealed interface AuthUiState {
     data object Loading     : AuthUiState
     data class  Success(val user: LoggedUser) : AuthUiState
     data class  Error(val message: String)    : AuthUiState
+    data object ResetEmailSent                : AuthUiState
+    data object ResetPasswordSuccess          : AuthUiState
 }

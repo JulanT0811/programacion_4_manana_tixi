@@ -60,6 +60,29 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun isLoggedIn(): Boolean =
         !tokenDataStore.getAccessToken().isNullOrBlank()
 
+    override suspend fun forgotPassword(email: String): Result<Unit> = runCatching {
+        val response = api.resetPassword(PasswordResetRequestDto(email))
+        if (!response.isSuccessful) {
+            val errorBody = response.errorBody()?.string() ?: ""
+            error(parseErrorMessage(errorBody, response.code()))
+        }
+    }
+
+    override suspend fun resetPasswordConfirm(
+        uid: String,
+        token: String,
+        newPassword: String,
+        reNewPassword: String
+    ): Result<Unit> = runCatching {
+        val response = api.resetPasswordConfirm(
+            PasswordResetConfirmDto(uid, token, newPassword, reNewPassword)
+        )
+        if (!response.isSuccessful) {
+            val errorBody = response.errorBody()?.string() ?: ""
+            error(parseErrorMessage(errorBody, response.code()))
+        }
+    }
+
     // Extrae el mensaje de error legible del JSON de Django
     private fun parseErrorMessage(body: String, code: Int): String {
         return try {
