@@ -19,9 +19,17 @@ interface AuthApi {
     @POST("auth/logout/")
     suspend fun logout(@Body body: LogoutRequest): Response<Unit>
 
-    @POST("auth/users/reset_password/")
-    suspend fun resetPassword(@Body body: PasswordResetRequestDto): Response<Unit>
+    // ── Recuperación de contraseña ───────────────────────────────────────────
 
-    @POST("auth/users/reset_password_confirm/")
-    suspend fun resetPasswordConfirm(@Body body: PasswordResetConfirmDto): Response<Unit>
+    /** Backend: POST /api/auth/password-reset/ — no requiere autenticación */
+    @POST("auth/password-reset/")
+    suspend fun requestPasswordReset(
+        @Body body: PasswordResetRequestDto,
+    ): Response<MessageDto>
+
+    /** Backend: POST /api/auth/password-reset/confirm/ */
+    @POST("auth/password-reset/confirm/")
+    suspend fun confirmPasswordReset(
+        @Body body: PasswordResetConfirmDto,
+    ): Response<MessageDto>
 }

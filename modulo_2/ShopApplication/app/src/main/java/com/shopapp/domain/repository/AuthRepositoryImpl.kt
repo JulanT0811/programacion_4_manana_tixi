@@ -61,7 +61,7 @@ class AuthRepositoryImpl @Inject constructor(
         !tokenDataStore.getAccessToken().isNullOrBlank()
 
     override suspend fun forgotPassword(email: String): Result<Unit> = runCatching {
-        val response = api.resetPassword(PasswordResetRequestDto(email))
+        val response = api.requestPasswordReset(PasswordResetRequestDto(email))
         if (!response.isSuccessful) {
             val errorBody = response.errorBody()?.string() ?: ""
             error(parseErrorMessage(errorBody, response.code()))
@@ -74,7 +74,7 @@ class AuthRepositoryImpl @Inject constructor(
         newPassword: String,
         reNewPassword: String
     ): Result<Unit> = runCatching {
-        val response = api.resetPasswordConfirm(
+        val response = api.confirmPasswordReset(
             PasswordResetConfirmDto(uid, token, newPassword, reNewPassword)
         )
         if (!response.isSuccessful) {
