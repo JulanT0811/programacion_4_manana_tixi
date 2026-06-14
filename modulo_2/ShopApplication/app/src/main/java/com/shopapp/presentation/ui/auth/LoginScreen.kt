@@ -22,10 +22,10 @@ import com.shopapp.theme.*
 
 @Composable
 fun LoginScreen(
-    onLoginSuccess:  (isStaff: Boolean) -> Unit,
+    onLoginSuccess:       (isStaff: Boolean) -> Unit,
     onNavigateToRegister: () -> Unit,
-    onNavigateToForgotPassword: () -> Unit,
-    viewModel: AuthViewModel = hiltViewModel(),
+    onForgotPassword:     () -> Unit = {},
+    viewModel:            AuthViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -120,22 +120,6 @@ fun LoginScreen(
                         imeAction     = ImeAction.Done,
                     )
 
-                    // Olvidé mi contraseña
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        TextButton(onClick = onNavigateToForgotPassword) {
-                            Text(
-                                text = "¿Olvidaste tu contraseña?",
-                                color = Accent,
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        }
-                    }
-
-                    Spacer(Modifier.height(16.dp))
-
                     // Botón
                     ShopButton(
                         text      = "Iniciar sesión",
@@ -143,6 +127,18 @@ fun LoginScreen(
                         isLoading = isLoading,
                         enabled   = username.isNotBlank() && password.isNotBlank(),
                     )
+
+                    // Olvidé mi contraseña
+                    TextButton(
+                        onClick  = onForgotPassword,
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                    ) {
+                        Text(
+                            text = "¿Olvidaste tu contraseña?",
+                            color = Accent,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
             }
 
