@@ -88,3 +88,9 @@
 **/*.bak
 **/*.orig
 **/*.rej
+# Ignorar carpetas de compilación y temporales
+**/android/flutter_tools_gradle/
+**/flutter_gradle/
+build/
+.gradle/
+.dart_tool/
