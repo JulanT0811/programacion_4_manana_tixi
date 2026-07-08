@@ -52,6 +52,7 @@ class _OrdersAdminScreenState extends ConsumerState<OrdersAdminScreen> {
 
     return Column(
       children: [
+        // ── Header ──────────────────────────────────────────
         Container(
           color:   AppColors.surface,
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -95,6 +96,7 @@ class _OrdersAdminScreenState extends ConsumerState<OrdersAdminScreen> {
           ),
         ),
 
+        // ── Contenido ─────────────────────────────────────────
         Expanded(
           child: Builder(builder: (_) {
             if (state.isLoading && state.orders.isEmpty) {
@@ -165,6 +167,8 @@ class _OrdersAdminScreenState extends ConsumerState<OrdersAdminScreen> {
   }
 }
 
+// ── OrderAdminCard ────────────────────────────────────────────
+
 class _OrderAdminCard extends StatelessWidget {
   final Order                      order;
   final void Function(OrderStatus) onStatus;
@@ -192,6 +196,7 @@ class _OrderAdminCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Primera fila
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,6 +221,7 @@ class _OrderAdminCard extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
+            // Preview ítems
             Wrap(
               spacing: 6, runSpacing: 4,
               children: [
@@ -240,6 +246,7 @@ class _OrderAdminCard extends StatelessWidget {
             const Divider(height: 1),
             const SizedBox(height: 8),
 
+            // Footer
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

@@ -7,17 +7,42 @@ import '../../../domain/model/user.dart';
 import '../../providers/users_admin_provider.dart';
 import '../../widgets/user_form.dart';
 
-class UsersAdminScreen extends ConsumerWidget {
+class UsersAdminScreen extends ConsumerStatefulWidget {
   const UsersAdminScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<UsersAdminScreen> createState() => _UsersAdminScreenState();
+}
+
+class _UsersAdminScreenState extends ConsumerState<UsersAdminScreen> {
+  final _scrollCtrl = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollCtrl.addListener(() {
+      if (_scrollCtrl.position.pixels >=
+          _scrollCtrl.position.maxScrollExtent - 150) {
+        ref.read(usersAdminProvider.notifier).loadMore();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state    = ref.watch(usersAdminProvider);
     final filtered = state.filtered;
     final tt       = Theme.of(context).textTheme;
 
     return Column(
       children: [
+        // ── Header ──────────────────────────────────────────
         Container(
           color:   AppColors.surface,
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -54,6 +79,8 @@ class UsersAdminScreen extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 12),
+
+              // Búsqueda
               TextField(
                 onChanged:  ref.read(usersAdminProvider.notifier).setSearch,
                 decoration: const InputDecoration(
@@ -64,6 +91,8 @@ class UsersAdminScreen extends ConsumerWidget {
                 style: const TextStyle(color: AppColors.textPrimary),
               ),
               const SizedBox(height: 10),
+
+              // Chips de filtro de rol
               SizedBox(
                 height: 34,
                 child:  ListView(
@@ -84,14 +113,15 @@ class UsersAdminScreen extends ConsumerWidget {
           ),
         ),
 
+        // ── Lista ─────────────────────────────────────────────
         Expanded(
           child: Builder(builder: (_) {
-            if (state.isLoading) {
+            if (state.isLoading && filtered.isEmpty) {
               return const Center(
                 child: CircularProgressIndicator(color: AppColors.accent),
               );
             }
-            if (state.error != null) {
+            if (state.error != null && filtered.isEmpty) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -123,18 +153,32 @@ class UsersAdminScreen extends ConsumerWidget {
             }
 
             return ListView.separated(
+              controller:      _scrollCtrl,
               padding:         const EdgeInsets.all(16),
-              itemCount:       filtered.length,
+              itemCount:       filtered.length + (state.isLoadingMore ? 1 : 0),
               separatorBuilder:(_, __) => const SizedBox(height: 10),
-              itemBuilder: (_, i) => _UserCard(
-                user:          filtered[i],
-                onToggleStaff: () => ref.read(usersAdminProvider.notifier)
-                    .toggleStaff(filtered[i].id, !filtered[i].isStaff),
-                onToggleActive:() => ref.read(usersAdminProvider.notifier)
-                    .toggleActive(filtered[i].id),
-                onEdit:        () => showUserForm(context, ref, initial: filtered[i]),
-                onDelete:      () => _confirmDelete(context, ref, filtered[i]),
-              ),
+              itemBuilder: (_, i) {
+                if (i >= filtered.length) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child:   CircularProgressIndicator(
+                        color: AppColors.accent, strokeWidth: 2,
+                      ),
+                    ),
+                  );
+                }
+                final user = filtered[i];
+                return _UserCard(
+                  user:          user,
+                  onToggleStaff: () => ref.read(usersAdminProvider.notifier)
+                      .toggleStaff(user.id, !user.isStaff),
+                  onToggleActive:() => ref.read(usersAdminProvider.notifier)
+                      .toggleActive(user.id),
+                  onEdit:        () => showUserForm(context, ref, initial: user),
+                  onDelete:      () => _confirmDelete(context, ref, user),
+                );
+              },
             );
           }),
         ),
@@ -173,6 +217,8 @@ class UsersAdminScreen extends ConsumerWidget {
   }
 }
 
+// ── UserCard ──────────────────────────────────────────────────
+
 class _UserCard extends StatelessWidget {
   final User         user;
   final VoidCallback onToggleStaff;
@@ -200,6 +246,7 @@ class _UserCard extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // Avatar
           Container(
             width:  46, height: 46,
             decoration: BoxDecoration(
@@ -219,6 +266,8 @@ class _UserCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
+
+          // Info
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,12 +324,15 @@ class _UserCard extends StatelessWidget {
               ],
             ),
           ),
+
+          // Acciones
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Toggle staff
                   GestureDetector(
                     onTap: onToggleStaff,
                     child: Padding(
@@ -294,6 +346,7 @@ class _UserCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Toggle activo
                   GestureDetector(
                     onTap: onToggleActive,
                     child: Padding(
@@ -305,6 +358,7 @@ class _UserCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Editar
                   GestureDetector(
                     onTap: onEdit,
                     child: const Padding(
@@ -313,6 +367,7 @@ class _UserCard extends StatelessWidget {
                           color: AppColors.textSecondary, size: 20),
                     ),
                   ),
+                  // Eliminar
                   GestureDetector(
                     onTap: onDelete,
                     child: const Padding(

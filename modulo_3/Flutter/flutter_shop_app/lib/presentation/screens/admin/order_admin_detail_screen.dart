@@ -57,6 +57,8 @@ class _DetailContent extends StatelessWidget {
       child:   Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
+          // Info general + estado
           _Card(
             title: 'Información del pedido',
             child: Column(
@@ -97,6 +99,8 @@ class _DetailContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
+
+          // Ítems
           _Card(
             title: 'Productos (${order.numItems})',
             child: Column(
@@ -136,6 +140,8 @@ class _DetailContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
+
+          // Resumen financiero
           _Card(
             title: 'Resumen financiero',
             child: Column(
@@ -151,6 +157,8 @@ class _DetailContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
+
+          // Cambio rápido de estado
           _Card(
             title: 'Cambio rápido de estado',
             child: Wrap(
@@ -202,6 +210,8 @@ class _DetailContent extends StatelessWidget {
     );
   }
 }
+
+// ── Sub-widgets ───────────────────────────────────────────────
 
 class _Card extends StatelessWidget {
   final String title;

@@ -33,9 +33,9 @@ Future<void> showCategoryForm(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
-    builder: (_) => UncontrolledProviderScope(
-      container: ProviderScope.containerOf(context),
-      child:     CategoryFormSheet(initial: initial),
+    builder: (_) => ProviderScope(
+      parent:       ProviderScope.containerOf(context),
+      child:        CategoryFormSheet(initial: initial),
     ),
   );
 }
@@ -218,15 +218,15 @@ class _CategoryFormSheetState extends ConsumerState<CategoryFormSheet> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Categoría activa',
+                            const Text('Categoría activa',
                                 style: TextStyle(
                                   color:      AppColors.textPrimary,
                                   fontWeight: FontWeight.w600,
                                 )),
-                            Text('Visible en el catálogo público',
+                            const Text('Visible en el catálogo público',
                                 style: TextStyle(
                                   color: AppColors.textSecondary, fontSize: 12,
                                 )),

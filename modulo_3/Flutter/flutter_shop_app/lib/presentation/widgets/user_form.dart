@@ -144,6 +144,7 @@ class _UserFormSheetState extends ConsumerState<UserFormSheet> {
               key: _formKey,
               child: Column(
                 children: [
+                  // Usuario y Email
                   Row(
                     children: [
                       Expanded(
@@ -168,6 +169,7 @@ class _UserFormSheetState extends ConsumerState<UserFormSheet> {
                   ),
                   const SizedBox(height: 12),
 
+                  // Nombre y Apellido
                   Row(
                     children: [
                       Expanded(
@@ -189,6 +191,7 @@ class _UserFormSheetState extends ConsumerState<UserFormSheet> {
                   ),
                   const SizedBox(height: 12),
 
+                  // Contraseña
                   TextFormField(
                     controller:    _passCtrl,
                     obscureText:   !_showPass,
@@ -214,6 +217,7 @@ class _UserFormSheetState extends ConsumerState<UserFormSheet> {
                   ),
                   const SizedBox(height: 12),
 
+                  // Toggles Staff y Activo en fila
                   Row(
                     children: [
                       Expanded(child: _ToggleCard(

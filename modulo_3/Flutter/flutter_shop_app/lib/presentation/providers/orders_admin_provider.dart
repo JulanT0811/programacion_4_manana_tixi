@@ -95,6 +95,7 @@ class OrdersAdminNotifier extends StateNotifier<OrdersAdminState> {
   void loadMore() => load(reset: false);
   void refresh()  => load();
 
+  // Cambio optimista de estado
   Future<void> changeStatus(int orderId, OrderStatus newStatus) async {
     final prevStatus = state.orders
         .firstWhere((o) => o.id == orderId, orElse: () => state.orders.first)
@@ -109,6 +110,7 @@ class OrdersAdminNotifier extends StateNotifier<OrdersAdminState> {
     try {
       await _datasource.updateStatus(orderId, newStatus.value);
     } catch (_) {
+      // Revertir
       state = state.copyWith(
         orders: state.orders.map((o) =>
           o.id == orderId ? o.copyWith(status: prevStatus) : o,
@@ -123,6 +125,7 @@ final ordersAdminProvider =
   return OrdersAdminNotifier(ref.watch(orderDatasourceProvider));
 });
 
+// Provider del detalle de pedido (admin)
 final orderAdminDetailProvider = FutureProvider.family<Order, int>((ref, id) {
   return ref.watch(orderDatasourceProvider).getOrder(id);
 });
